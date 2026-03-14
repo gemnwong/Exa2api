@@ -25,6 +25,53 @@
 
 推荐直接用 Docker Compose。
 
+## 镜像部署
+
+本仓库会自动构建并发布 GHCR 镜像：
+
+- `ghcr.io/gemnwong/exa2api-public:main`
+
+如果不想本地构建，可直接使用已发布镜像部署。
+
+### 直接运行
+
+```bash
+docker run -d \
+  --name exa2api \
+  -p 7860:7860 \
+  -v $(pwd)/data:/app/data \
+  --restart unless-stopped \
+  ghcr.io/gemnwong/exa2api-public:main
+```
+
+### 直接拉取后运行
+
+```bash
+docker pull ghcr.io/gemnwong/exa2api-public:main
+docker run -d \
+  --name exa2api \
+  -p 7860:7860 \
+  -v $(pwd)/data:/app/data \
+  --restart unless-stopped \
+  ghcr.io/gemnwong/exa2api-public:main
+```
+
+### Docker Compose 使用现成镜像
+
+如果使用现成镜像，可将 `docker-compose.yml` 改为：
+
+```yaml
+services:
+  exa-api:
+    image: ghcr.io/gemnwong/exa2api-public:main
+    container_name: exa2api
+    ports:
+      - "127.0.0.1:7860:7860"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+```
+
 ### 默认启动
 
 ```bash

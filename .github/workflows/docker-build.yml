@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: exa2api
+      IMAGE_NAME: exa2api-public
     steps:
       - name: Checkout
         uses: actions/checkout@v4
