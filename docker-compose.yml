@@ -1,0 +1,36 @@
+services:
+  exa-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APT_MIRROR: ${APT_MIRROR:-https://deb.debian.org}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        ALL_PROXY: ${ALL_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-localhost,127.0.0.1,host.docker.internal}
+        http_proxy: ${http_proxy:-}
+        https_proxy: ${https_proxy:-}
+        all_proxy: ${all_proxy:-}
+        no_proxy: ${no_proxy:-localhost,127.0.0.1,host.docker.internal}
+    image: exa2api:latest
+    container_name: exa2api
+    ports:
+      - "127.0.0.1:7860:7860"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # 日志限制
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+

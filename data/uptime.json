@@ -1,0 +1,536 @@
+{
+  "api_service": [
+    {
+      "time": "13:09:39",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:39",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:43",
+      "success": true,
+      "level": "up",
+      "latency_ms": 72,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:44",
+      "success": true,
+      "level": "up",
+      "latency_ms": 2,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 8,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 5,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:45",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:49",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:49",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:49",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:49",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:49",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:52",
+      "success": true,
+      "level": "up",
+      "latency_ms": 3,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:55",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:55",
+      "success": true,
+      "level": "up",
+      "latency_ms": 3,
+      "status_code": 200
+    },
+    {
+      "time": "13:09:58",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:03",
+      "success": true,
+      "level": "up",
+      "latency_ms": 3,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:04",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:04",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:08",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:16",
+      "success": true,
+      "level": "up",
+      "latency_ms": 2,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:16",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:17",
+      "success": true,
+      "level": "up",
+      "latency_ms": 5,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:17",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:17",
+      "success": true,
+      "level": "up",
+      "latency_ms": 27,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:17",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:18",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:10:18",
+      "success": true,
+      "level": "up",
+      "latency_ms": 8,
+      "status_code": 200
+    },
+    {
+      "time": "13:11:55",
+      "success": true,
+      "level": "up",
+      "latency_ms": 4126,
+      "status_code": 200
+    },
+    {
+      "time": "13:12:36",
+      "success": false,
+      "level": "down",
+      "latency_ms": 54,
+      "status_code": 400
+    },
+    {
+      "time": "13:13:03",
+      "success": true,
+      "level": "up",
+      "latency_ms": 4084,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:35",
+      "success": true,
+      "level": "up",
+      "latency_ms": 5,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:35",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:36",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 4,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 2,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:37",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 10,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 10,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 8,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 12,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 14,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 6,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:38",
+      "success": true,
+      "level": "up",
+      "latency_ms": 7,
+      "status_code": 200
+    },
+    {
+      "time": "13:33:40",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:42",
+      "success": true,
+      "level": "up",
+      "latency_ms": 0,
+      "status_code": 304
+    },
+    {
+      "time": "13:33:42",
+      "success": true,
+      "level": "up",
+      "latency_ms": 1,
+      "status_code": 304
+    }
+  ],
+  "account_pool": [],
+  "exa-search": [
+    {
+      "time": "17:43:10",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "17:43:31",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "19:27:40",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    }
+  ],
+  "exa-contents": [
+    {
+      "time": "17:43:16",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "17:43:36",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "19:27:45",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    }
+  ],
+  "exa-answer": [
+    {
+      "time": "17:43:15",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "17:43:35",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "19:27:45",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    }
+  ],
+  "exa-find-similar": [],
+  "exa-research": [
+    {
+      "time": "17:43:16",
+      "success": false,
+      "level": "down",
+      "status_code": 400
+    },
+    {
+      "time": "17:43:17",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "17:43:37",
+      "success": true,
+      "level": "up",
+      "status_code": 201
+    },
+    {
+      "time": "17:43:37",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "17:43:38",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "19:27:46",
+      "success": true,
+      "level": "up",
+      "status_code": 201
+    },
+    {
+      "time": "19:27:47",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    },
+    {
+      "time": "19:27:47",
+      "success": true,
+      "level": "up",
+      "status_code": 200
+    }
+  ]
+}
