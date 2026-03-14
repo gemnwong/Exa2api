@@ -104,25 +104,6 @@
           添加账户
         </button>
 
-        <button
-          class="relative rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors
-                 hover:border-primary hover:text-primary"
-          @click="openTaskModal"
-        >
-          <span class="flex items-center gap-2">
-            任务管理
-            <template v-if="isTaskRunning">
-              <span class="flex items-center gap-1.5 text-xs text-sky-500">
-                <span class="relative flex h-2 w-2">
-                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-500 opacity-75"></span>
-                  <span class="relative inline-flex h-2 w-2 rounded-full bg-sky-500"></span>
-                </span>
-                {{ taskProgressText }}
-              </span>
-            </template>
-          </span>
-        </button>
-
         <div ref="moreActionsRef" class="relative">
           <button
             class="flex items-center gap-2 rounded-full border border-input bg-background px-4 py-2 text-sm font-medium
@@ -533,195 +514,6 @@
   </Teleport>
 
   <Teleport to="body">
-    <div v-if="isTaskOpen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-4">
-      <div class="flex h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-xl">
-        <div class="flex items-center justify-between border-b border-border/60 px-6 py-4">
-          <div>
-            <p class="text-sm font-medium text-foreground">任务管理</p>
-            <p class="mt-1 text-xs text-muted-foreground">管理刷新任务</p>
-          </div>
-          <button
-            class="text-xs text-muted-foreground transition-colors hover:text-foreground"
-            @click="closeTaskModal"
-          >
-            关闭
-          </button>
-        </div>
-
-        <!-- Tab 导航 -->
-        <div class="flex border-b border-border/60 px-6">
-          <button
-            type="button"
-            class="relative px-4 py-3 text-sm font-medium transition-colors"
-            :class="activeTaskTab === 'current' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'"
-            @click="activeTaskTab = 'current'"
-          >
-            当前任务
-            <span
-              v-if="activeTaskTab === 'current'"
-              class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-            ></span>
-          </button>
-          <button
-            type="button"
-            class="relative px-4 py-3 text-sm font-medium transition-colors"
-            :class="activeTaskTab === 'history' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'"
-            @click="activeTaskTab = 'history'"
-          >
-            历史记录
-            <span
-              v-if="activeTaskTab === 'history'"
-              class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-            ></span>
-          </button>
-        </div>
-
-        <!-- 当前任务 Tab -->
-        <div v-if="activeTaskTab === 'current'" class="flex min-h-0 flex-1 flex-col">
-          <!-- 固定任务信息区域 -->
-          <div v-if="automationError || loginTask" class="px-6 py-4">
-            <div v-if="automationError" class="rounded-2xl bg-destructive/10 px-3 py-2 text-xs text-destructive">
-              {{ automationError }}
-            </div>
-
-            <div v-if="loginTask" class="grid gap-3 text-xs text-muted-foreground">
-            <div v-if="loginTask" class="space-y-1">
-              <div class="flex items-center justify-between gap-3 font-medium text-foreground">
-                <div class="flex items-center gap-2">
-                  <span
-                    class="h-2.5 w-2.5 rounded-full"
-                    :class="getTaskStatusIndicatorClass(loginTask)"
-                    aria-hidden="true"
-                  ></span>
-                  刷新任务
-                </div>
-                <button
-                  v-if="loginTask.status === 'running' || loginTask.status === 'pending'"
-                  class="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-rose-500 hover:text-rose-600"
-                  @click="cancelLogin(loginTask.id)"
-                >
-                  中断
-                </button>
-              </div>
-              <div class="flex flex-wrap gap-x-4 gap-y-1">
-                <span>状态：{{ formatTaskStatus(loginTask) }}</span>
-                <span>进度：{{ loginTask.progress }}/{{ loginTask.account_ids.length }}</span>
-                <span>成功：{{ loginTask.success_count }}</span>
-                <span>失败：{{ loginTask.fail_count }}</span>
-              </div>
-            </div>
-          </div>
-          </div>
-
-          <!-- 日志区域（独立滚动） -->
-          <div
-            v-if="loginTask || loginLogs.length"
-            class="flex min-h-0 flex-1 flex-col px-6 pb-4"
-          >
-            <div
-              ref="taskLogsRef"
-              class="scrollbar-slim flex-1 overflow-y-auto rounded-2xl border border-border bg-muted/30 p-3"
-            >
-              <div v-if="loginLogs.length" class="mt-4 space-y-2">
-                <p class="text-xs font-semibold text-foreground">刷新日志</p>
-                <div class="space-y-1 text-[11px] text-muted-foreground">
-                  <div v-for="(log, index) in loginLogs" :key="`login-${index}`" class="font-mono">
-                    {{ formatLogLine(log) }}
-                  </div>
-                </div>
-              </div>
-              <div v-if="!loginLogs.length" class="text-xs text-muted-foreground">
-                日志已清空，新的日志会继续显示。
-              </div>
-            </div>
-          </div>
-
-          <div
-            v-if="!automationError && !loginTask && !loginLogs.length"
-            class="flex-1 px-6 py-4"
-          >
-            <div class="rounded-2xl border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-              暂无任务
-            </div>
-          </div>
-
-          <!-- 固定底部按钮区域 -->
-          <div class="flex items-center justify-end gap-2 border-t border-border/60 px-6 py-4">
-            <button
-              class="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors
-                     hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
-              :disabled="!loginLogs.length && !loginTask && !automationError"
-              @click="clearTaskLogs"
-            >
-              清空日志
-            </button>
-          </div>
-        </div>
-
-        <!-- 历史记录 Tab -->
-        <div v-if="activeTaskTab === 'history'" class="flex min-h-0 flex-1 flex-col">
-          <div class="flex-1 overflow-y-auto px-6 py-4">
-            <div v-if="isLoadingHistory" class="flex items-center justify-center py-8">
-              <svg class="h-6 w-6 animate-spin text-muted-foreground" viewBox="0 0 24 24" fill="none">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            </div>
-            <div v-else-if="taskHistory.length === 0" class="rounded-2xl border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-              <p class="font-medium text-foreground mb-2">暂无历史记录</p>
-              <p>完成的任务将显示在这里</p>
-            </div>
-            <div v-else class="space-y-3">
-              <div
-                v-for="(record, index) in taskHistory"
-                :key="index"
-                class="rounded-2xl border border-border bg-card px-4 py-3 text-sm"
-              >
-                <div class="flex items-center justify-between mb-2">
-                  <span class="flex items-center gap-2 font-medium text-foreground">
-                    <span
-                      class="h-2.5 w-2.5 rounded-full"
-                      :class="getHistoryStatusIndicatorClass(record)"
-                      aria-hidden="true"
-                    ></span>
-                    {{ record.type === 'login' ? '刷新任务' : '注册任务' }}
-                  </span>
-                  <span class="text-xs text-muted-foreground">
-                    {{ new Date(record.created_at * 1000).toLocaleString('zh-CN') }}
-                  </span>
-                </div>
-                <div class="text-xs text-muted-foreground space-y-1">
-                  <div>
-                    状态：<span :class="getHistoryStatusTextClass(record)">
-                      {{ formatTaskStatus(record) }}
-                    </span>
-                  </div>
-                  <div class="flex flex-wrap gap-x-4 gap-y-1">
-                    <span>进度：{{ record.progress }}/{{ getHistoryTotal(record) }}</span>
-                    <span>成功：{{ record.success_count }}</span>
-                    <span>失败：{{ record.fail_count }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 固定底部按钮区域 -->
-          <div class="flex items-center justify-end gap-2 border-t border-border/60 px-6 py-4">
-            <button
-              class="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors
-                     hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
-              :disabled="taskHistory.length === 0"
-              @click="clearTaskHistory"
-            >
-              清空历史
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Teleport>
-  <Teleport to="body">
     <div v-if="isEditOpen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-4">
       <div class="w-full max-w-lg rounded-3xl border border-border bg-card p-6 shadow-xl">
         <div class="flex items-center justify-between">
@@ -960,7 +752,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAccountsStore } from '@/stores/accounts'
 import SelectMenu from '@/components/ui/SelectMenu.vue'
@@ -969,7 +761,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import { useConfirmDialog } from '@/composables/useConfirmDialog'
 import { useToast } from '@/composables/useToast'
 import { accountsApi } from '@/api'
-import type { AdminAccount, AccountConfigItem, LoginTask } from '@/types/api'
+import type { AdminAccount, AccountConfigItem } from '@/types/api'
 
 const accountsStore = useAccountsStore()
 const { accounts, isLoading, isOperating, batchProgress } = storeToRefs(accountsStore)
@@ -1001,33 +793,8 @@ const importFileName = ref('')
 const isExportOpen = ref(false)
 const exportScope = ref<'all' | 'selected'>('all')
 const exportFormat = ref<'json' | 'txt'>('json')
-const isTaskOpen = ref(false)
-const activeTaskTab = ref<'current' | 'history'>('current')
 const showMoreActions = ref(false)
 const moreActionsRef = ref<HTMLDivElement | null>(null)
-const lastLoginTaskId = ref<string | null>(null)
-const taskHistory = ref<any[]>([])  // 任务历史记录
-const isLoadingHistory = ref(false)  // 加载历史记录状态
-type TaskLogLine = { time: string; level: string; message: string }
-const loginLogClearMarker = ref<TaskLogLine | null>(null)
-const loginTask = ref<LoginTask | null>(null)
-const refreshingAccountIds = ref<Set<string>>(new Set())  // 正在刷新的账户ID集合（仅用于显示状态）
-const taskLogsRef = ref<HTMLDivElement | null>(null)
-const isRefreshing = ref(false)
-const automationError = ref('')
-const LOGIN_TASK_CACHE_KEY = 'accounts-login-task-cache'
-const LOGIN_CLEAR_KEY = 'accounts-login-log-clear'
-const LOGIN_DISMISS_KEY = 'accounts-login-task-dismissed'
-const LOGIN_CLEARED_KEY = 'accounts-login-task-cleared'
-
-type TaskKind = 'login'
-const TASK_KEYS = {
-  login: {
-    clearKey: LOGIN_CLEAR_KEY,
-    dismissKey: LOGIN_DISMISS_KEY,
-    clearedKey: LOGIN_CLEARED_KEY,
-  },
-} as const
 const editForm = ref<AccountConfigItem>({
   id: '',
   secure_c_ses: '',
@@ -1040,7 +807,6 @@ const editIndex = ref<number | null>(null)
 const configAccounts = ref<AccountConfigItem[]>([])
 const statusOptions = [
   { label: '全部状态', value: 'all' },
-  { label: '刷新中', value: '刷新中' },
   { label: '正常', value: '正常' },
   { label: '手动禁用', value: '手动禁用' },
   { label: '403 禁用', value: '403 禁用' },
@@ -1123,241 +889,6 @@ const refreshAccounts = async () => {
   showMoreActions.value = false
 }
 
-const readCachedTask = <T,>(key: string): T | null => {
-  try {
-    const raw = localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : null
-  } catch {
-    return null
-  }
-}
-
-const writeCachedTask = (key: string, value: unknown) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    // ignore storage errors
-  }
-}
-
-const removeCachedTask = (key: string) => {
-  try {
-    localStorage.removeItem(key)
-  } catch {
-    // ignore storage errors
-  }
-}
-
-type DismissedTaskMeta = { id?: string; created_at?: number } | null
-
-const readDismissedTaskMeta = (key: string): DismissedTaskMeta => {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return null
-    try {
-      const parsed = JSON.parse(raw) as Partial<{ id: string; created_at: number }>
-      if (parsed && (parsed.id || typeof parsed.created_at === 'number')) {
-        return { id: parsed.id, created_at: parsed.created_at }
-      }
-    } catch {
-      // Backward compatibility: plain id string
-      return { id: raw }
-    }
-    return null
-  } catch {
-    return null
-  }
-}
-
-const writeDismissedTaskMeta = (key: string, meta: DismissedTaskMeta) => {
-  try {
-    if (!meta || (!meta.id && typeof meta.created_at !== 'number')) {
-      localStorage.removeItem(key)
-      return
-    }
-    localStorage.setItem(key, JSON.stringify(meta))
-  } catch {
-    // ignore storage errors
-  }
-}
-
-const readDismissedTaskId = (key: string) => readDismissedTaskMeta(key)?.id || null
-
-const writeDismissedTaskId = (key: string, taskId: string | null) => {
-  if (!taskId) {
-    writeDismissedTaskMeta(key, null)
-    return
-  }
-  writeDismissedTaskMeta(key, { id: taskId })
-}
-
-const isTaskMetaMatch = (task: { id?: string; created_at?: number } | null | undefined, meta: DismissedTaskMeta) => {
-  if (!task || !meta) return false
-  if (meta.id && task.id && task.id === meta.id) return true
-  if (typeof meta.created_at === 'number' && typeof task.created_at === 'number' && task.created_at === meta.created_at) {
-    return true
-  }
-  return false
-}
-
-const isTaskDismissed = (task: { id?: string; created_at?: number } | null | undefined, meta: DismissedTaskMeta) =>
-  isTaskMetaMatch(task, meta)
-
-const readClearedTaskMeta = (key: string): DismissedTaskMeta => readDismissedTaskMeta(key)
-const writeClearedTaskMeta = (key: string, meta: DismissedTaskMeta) => writeDismissedTaskMeta(key, meta)
-
-const isTaskActive = (task: LoginTask | null | undefined) => {
-  const status = task?.status
-  return status === 'running' || status === 'pending'
-}
-
-const getTaskByKind = (_kind: TaskKind) => loginTask.value
-
-const markTaskCleared = (kind: TaskKind, task: LoginTask) => {
-  const key = TASK_KEYS[kind].clearedKey
-  writeClearedTaskMeta(key, {
-    id: task.id,
-    created_at: task.created_at,
-  })
-}
-
-const setLogClearMarker = (kind: TaskKind, marker: TaskLogLine | null) => {
-  loginLogClearMarker.value = marker
-}
-
-const clearTaskSnapshot = (kind: TaskKind, persist = true) => {
-  syncLoginTask(null, persist)
-}
-
-const clearFinishedTask = (kind: TaskKind) => {
-  const task = getTaskByKind(kind)
-  if (!task || isTaskActive(task)) return
-  markTaskCleared(kind, task)
-  clearTaskSnapshot(kind, true)
-}
-
-const handleTaskIdle = (kind: TaskKind) => {
-  // 后端 idle：保留现有任务快照
-  cleanupCancelledTasks()
-}
-
-const handleTaskNotFound = (kind: TaskKind) => {
-  clearLoginTimer()
-  isRefreshing.value = false
-}
-
-const handleTaskActive = (_kind: TaskKind, task: LoginTask) => {
-  syncLoginTask(task)
-  isRefreshing.value = true
-  startLoginPolling(task.id)
-}
-
-const handleTaskInactive = (_kind: TaskKind, task: LoginTask) => {
-  syncLoginTask(task)
-}
-
-const shouldKeepInactiveTask = (kind: TaskKind, task: LoginTask) => {
-  const dismissedMeta = readDismissedTaskMeta(TASK_KEYS[kind].dismissKey)
-  const clearedMeta = readClearedTaskMeta(TASK_KEYS[kind].clearedKey)
-  return !isTaskDismissed(task, dismissedMeta) && !isTaskMetaMatch(task, clearedMeta)
-}
-
-const loadCurrentTaskByKind = async (kind: TaskKind) => {
-  try {
-    const current = await accountsApi.getLoginCurrent()
-    if (current && 'id' in current) {
-      const isActive = current.status === 'running' || current.status === 'pending'
-      if (isActive) {
-        handleTaskActive(kind, current)
-      } else if (shouldKeepInactiveTask(kind, current)) {
-        handleTaskInactive(kind, current)
-      }
-    } else {
-      handleTaskIdle(kind)
-    }
-  } catch (error: any) {
-    if (error?.status === 404 || error?.message === 'Not found') {
-      handleTaskNotFound(kind)
-    } else {
-      automationError.value = error.message || '加载刷新任务失败'
-    }
-  }
-}
-
-const readClearMarker = (key: string): TaskLogLine | null => {
-  const raw = localStorage.getItem(key)
-  if (!raw) return null
-
-  // Backward compatibility: older versions stored numeric offsets.
-  // If we see a number, ignore it so logs still render.
-  const asNumber = Number(raw)
-  if (Number.isFinite(asNumber)) return null
-
-  try {
-    const parsed = JSON.parse(raw) as Partial<TaskLogLine> | null
-    if (!parsed || typeof parsed !== 'object') return null
-    if (typeof parsed.time !== 'string' || typeof parsed.level !== 'string' || typeof parsed.message !== 'string') {
-      return null
-    }
-    return { time: parsed.time, level: parsed.level, message: parsed.message }
-  } catch {
-    return null
-  }
-}
-
-const writeClearMarker = (key: string, value: TaskLogLine | null) => {
-  try {
-    if (!value) {
-      localStorage.removeItem(key)
-      return
-    }
-    localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    // ignore storage errors
-  }
-}
-
-const syncLoginTask = (task: LoginTask | null, persist = true) => {
-  if (!task) {
-    loginTask.value = null
-    lastLoginTaskId.value = null
-    loginLogClearMarker.value = null
-    if (persist) {
-      removeCachedTask(LOGIN_TASK_CACHE_KEY)
-      writeClearMarker(LOGIN_CLEAR_KEY, null)
-    }
-    return
-  }
-
-  loginTask.value = task
-  if (task.id && task.id !== lastLoginTaskId.value) {
-    lastLoginTaskId.value = task.id
-    writeDismissedTaskMeta(LOGIN_DISMISS_KEY, null)
-    writeClearedTaskMeta(LOGIN_CLEARED_KEY, null)
-    setLogClearMarker('login', null)
-    writeClearMarker(LOGIN_CLEAR_KEY, null)
-  }
-  if (persist) {
-    writeCachedTask(LOGIN_TASK_CACHE_KEY, task)
-  }
-}
-
-const hydrateTaskCache = () => {
-  loginLogClearMarker.value = readClearMarker(LOGIN_CLEAR_KEY)
-  const cachedLogin = readCachedTask<LoginTask>(LOGIN_TASK_CACHE_KEY)
-  if (cachedLogin) {
-    const dismissedMeta = readDismissedTaskMeta(TASK_KEYS.login.dismissKey)
-    const clearedMeta = readClearedTaskMeta(TASK_KEYS.login.clearedKey)
-    if (!isTaskDismissed(cachedLogin, dismissedMeta) && !isTaskMetaMatch(cachedLogin, clearedMeta)) {
-      loginTask.value = cachedLogin
-      lastLoginTaskId.value = cachedLogin.id || null
-    }
-  }
-}
-
-const cleanupCancelledTasks = () => {
-  // Keep completed/cancelled task logs; do not auto-clear.
-}
 
 const openRegisterModal = () => {
   isRegisterOpen.value = true
@@ -1815,137 +1346,6 @@ const downloadText = (content: string, filename: string, mime: string) => {
   URL.revokeObjectURL(url)
 }
 
-const refreshTaskSnapshot = async () => {
-  try {
-    const tasks: Promise<void>[] = []
-    const loginId = loginTask.value?.id
-
-    if (loginId) {
-      tasks.push(updateLoginTask(loginId))
-    }
-
-    if (!tasks.length) {
-      await loadCurrentTasks()
-    } else {
-      await Promise.all(tasks)
-    }
-
-    cleanupCancelledTasks()
-  } catch (error: any) {
-    automationError.value = error?.message || '任务状态更新失败'
-  }
-}
-
-const openTaskModal = async () => {
-  isTaskOpen.value = true
-  activeTaskTab.value = 'current'
-  await refreshTaskSnapshot()
-}
-
-const fetchTaskHistory = async () => {
-  isLoadingHistory.value = true
-  try {
-    const response = await fetch('/admin/task-history', {
-      headers: { 'Content-Type': 'application/json' }
-    })
-    if (!response.ok) throw new Error('获取历史记录失败')
-    const data = await response.json()
-    const history = Array.isArray(data.history) ? data.history : []
-    const dismissedLogin = readDismissedTaskMeta(LOGIN_DISMISS_KEY)
-    taskHistory.value = history.filter((record: any) => {
-      if (record?.type === 'register') return false
-      const meta = dismissedLogin
-      if (!meta) return true
-      const id = typeof record?.id === 'string' ? record.id : String(record?.id || '')
-      const createdAt = typeof record?.created_at === 'number' ? record.created_at : undefined
-      if (meta.id && id && id === meta.id) return false
-      if (typeof meta.created_at === 'number' && typeof createdAt === 'number' && createdAt === meta.created_at) {
-        return false
-      }
-      return true
-    })
-  } catch (error: any) {
-    toast.error(error?.message || '获取历史记录失败')
-  } finally {
-    isLoadingHistory.value = false
-  }
-}
-
-const clearTaskHistory = async () => {
-  const confirmed = await confirmDialog.ask({
-    title: '清空历史记录',
-    message: '确定要清空所有任务历史记录吗？',
-    confirmText: '清空',
-  })
-  if (!confirmed) return
-  try {
-    const response = await fetch('/admin/task-history?confirm=yes', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' }
-    })
-    if (!response.ok) throw new Error('清空历史记录失败')
-    taskHistory.value = []
-    toast.success('历史记录已清空')
-  } catch (error: any) {
-    toast.error(error?.message || '清空历史记录失败')
-  }
-}
-
-const closeTaskModal = () => {
-  isTaskOpen.value = false
-  // 关闭弹窗时，确保已中断任务不会被缓存"复活"
-  cleanupCancelledTasks()
-}
-
-const clearTaskLogs = async () => {
-  const confirmed = await confirmDialog.ask({
-    title: '清空当前日志',
-    message: '确定要清空当前任务日志吗？',
-    confirmText: '清空',
-  })
-  if (!confirmed) return
-  const clearLogsFor = (kind: TaskKind) => {
-    const task = getTaskByKind(kind)
-    if (!task) return
-    if (!isTaskActive(task)) {
-      markTaskCleared(kind, task)
-      clearTaskSnapshot(kind, true)
-      return
-    }
-    const logs = (task.logs || []) as TaskLogLine[]
-    if (!logs.length) return
-    const marker = logs[logs.length - 1]
-    setLogClearMarker(kind, marker)
-    writeClearMarker(TASK_KEYS[kind].clearKey, marker)
-  }
-
-  clearLogsFor('login')
-
-  automationError.value = ''
-  toast.success('当前日志已清空')
-}
-
-const filterLogsAfterMarker = (logs: TaskLogLine[], marker: TaskLogLine | null) => {
-  if (!marker) return logs
-  for (let i = logs.length - 1; i >= 0; i -= 1) {
-    const item = logs[i]
-    if (item.time === marker.time && item.level === marker.level && item.message === marker.message) {
-      return logs.slice(i + 1)
-    }
-  }
-  // Marker not found (e.g., backend truncates to last N logs) — show current logs so new logs keep appearing.
-  return logs
-}
-
-const cancelLogin = async (taskId: string) => {
-  try {
-    await accountsApi.cancelLoginTask(taskId, 'cancelled_by_user')
-    await refreshTaskSnapshot()
-    toast.success('已请求中断刷新任务')
-  } catch (error: any) {
-    toast.error(error?.message || '中断刷新任务失败')
-  }
-}
 
 const toggleMoreActions = () => {
   showMoreActions.value = !showMoreActions.value
@@ -1963,64 +1363,16 @@ const handleMoreActionsClick = (event: MouseEvent) => {
   }
 }
 
-// 监听标签页切换，自动加载历史记录
-watch(activeTaskTab, async (newTab) => {
-  if (newTab === 'history') {
-    await fetchTaskHistory()
-  }
-})
-
 onMounted(async () => {
-  hydrateTaskCache()
   await refreshAccounts()
-  await loadCurrentTasks()
-  startBackgroundTaskPolling()
   document.addEventListener('click', handleMoreActionsClick)
 })
 
-const loginLogs = computed(() => {
-  const logs = loginTask.value?.logs || []
-  return filterLogsAfterMarker(logs as TaskLogLine[], loginLogClearMarker.value)
-})
-const scrollTaskLogsToBottom = async () => {
-  await nextTick()
-  const container = taskLogsRef.value
-  if (!container) return
-  container.scrollTop = container.scrollHeight
-}
-
-watch([loginLogs, isTaskOpen], async () => {
-  if (!isTaskOpen.value) return
-  await scrollTaskLogsToBottom()
-}, { deep: true })
-const isTaskRunning = computed(() => {
-  const loginStatus = loginTask.value?.status
-  return loginStatus === 'running' ||
-    loginStatus === 'pending'
-})
-
-const taskProgressText = computed(() => {
-  const login = loginTask.value
-  const loginActive = login?.status === 'running' || login?.status === 'pending'
-
-  if (loginActive) {
-    return `刷新 ${login.progress}/${login.account_ids.length}`
-  }
-  return ''
-})
-
 onBeforeUnmount(() => {
-  clearRegisterTimer()
-  clearLoginTimer()
-  clearBackgroundTaskTimer()
   document.removeEventListener('click', handleMoreActionsClick)
 })
 
 const statusLabel = (account: AdminAccount) => {
-  // 检查是否正在刷新
-  if (refreshingAccountIds.value.has(account.id)) {
-    return '刷新中'
-  }
   if (account.disabled) {
     if (account.disabled_reason?.includes('403')) {
       return '403 禁用'
@@ -2032,9 +1384,6 @@ const statusLabel = (account: AdminAccount) => {
 
 const statusClass = (account: AdminAccount) => {
   const status = statusLabel(account)
-  if (status === '刷新中') {
-    return 'bg-sky-500 text-white'
-  }
   if (status === '手动禁用') {
     return 'bg-muted text-muted-foreground'
   }
@@ -2356,25 +1705,6 @@ const handleDelete = async (accountId: string) => {
   }
 }
 
-let loginTimer: number | null = null
-let backgroundTaskTimer: number | null = null
-let backgroundTaskPending = false
-
-const clearLoginTimer = () => {
-  if (loginTimer !== null) {
-    window.clearInterval(loginTimer)
-    loginTimer = null
-  }
-}
-
-const clearBackgroundTaskTimer = () => {
-  if (backgroundTaskTimer !== null) {
-    window.clearInterval(backgroundTaskTimer)
-    backgroundTaskTimer = null
-  }
-  backgroundTaskPending = false
-}
-
 const getTaskResultType = (
   status: string,
   success: number,
@@ -2405,132 +1735,6 @@ const formatTaskStatus = (task: any) => {
   if (result === 'failed') return '已完成（全部失败）'
   if (result === 'partial') return '已完成（部分失败）'
   return '已完成'
-}
-
-const getHistoryTotal = (record: any) => {
-  const total = Number.isFinite(record?.total) ? record.total : undefined
-  if (typeof total === 'number') return total
-  const progress = Number.isFinite(record?.progress) ? record.progress : 0
-  return progress
-}
-
-const getHistoryStatusTextClass = (record: any) => {
-  const status = record?.status
-  const success = record?.success_count ?? 0
-  const fail = record?.fail_count ?? 0
-  const total = getHistoryTotal(record)
-  const result = getTaskResultType(status, success, fail, total)
-  if (result === 'running' || result === 'pending') return 'text-sky-600'
-  if (result === 'success') return 'text-emerald-600'
-  if (result === 'failed') return 'text-rose-600'
-  if (result === 'partial') return 'text-amber-600'
-  if (result === 'cancelled') return 'text-muted-foreground'
-  return 'text-muted-foreground'
-}
-
-const getHistoryStatusIndicatorClass = (record: any) => {
-  const status = record?.status
-  const success = record?.success_count ?? 0
-  const fail = record?.fail_count ?? 0
-  const total = getHistoryTotal(record)
-  const result = getTaskResultType(status, success, fail, total)
-  if (result === 'running' || result === 'pending') return 'bg-sky-400'
-  if (result === 'success') return 'bg-emerald-400'
-  if (result === 'failed') return 'bg-rose-500'
-  if (result === 'partial') return 'bg-amber-400'
-  return 'bg-muted-foreground'
-}
-
-const getTaskStatusIndicatorClass = (task: LoginTask) => {
-  const status = task.status
-  const success = task.success_count ?? 0
-  const fail = task.fail_count ?? 0
-  const total = 'count' in task ? task.count : task.account_ids?.length
-  const result = getTaskResultType(status, success, fail, total)
-  if (result === 'running' || result === 'pending') return 'bg-sky-400'
-  if (result === 'success') return 'bg-emerald-400'
-  if (result === 'failed') return 'bg-rose-500'
-  if (result === 'partial') return 'bg-amber-400'
-  return 'bg-muted-foreground'
-}
-
-const updateLoginTask = async (taskId: string) => {
-  let task: LoginTask
-  try {
-    task = await accountsApi.getLoginTask(taskId)
-  } catch (error: any) {
-    // 任务已不存在（被清理/过期/后端重启）：静默清理，避免弹窗显示 "Not found"
-    if (error?.status === 404 || error?.message === 'Not found') {
-      clearLoginTimer()
-      isRefreshing.value = false
-      refreshingAccountIds.value = new Set()  // 清空刷新状态
-      return
-    }
-    throw error
-  }
-  syncLoginTask(task)
-
-  // 更新正在刷新的账户列表
-  if (task.status === 'running' || task.status === 'pending') {
-    refreshingAccountIds.value = new Set(task.account_ids || [])
-  } else {
-    refreshingAccountIds.value = new Set()  // 任务完成，清空刷新状态
-  }
-
-  if (task.status !== 'running' && task.status !== 'pending') {
-    isRefreshing.value = false
-    clearLoginTimer()
-    await refreshAccounts()
-
-    // 显示任务完成通知
-    const successCount = task.success_count || 0
-    const failCount = task.fail_count || 0
-    if (successCount > 0 && failCount > 0) {
-      toast.success(`刷新任务完成：成功 ${successCount}，失败 ${failCount}`)
-    } else if (successCount > 0 && failCount === 0) {
-      toast.success(`刷新任务完成：全部成功 (${successCount})`)
-    } else if (failCount > 0 && successCount === 0) {
-      toast.error(`刷新任务完成：全部失败 (${failCount})`)
-    } else {
-      toast.error('刷新任务失败')
-    }
-
-    await fetchTaskHistory()
-    return
-  }
-}
-
-const startLoginPolling = (taskId: string) => {
-  clearLoginTimer()
-  loginTimer = window.setInterval(() => {
-    updateLoginTask(taskId).catch((error) => {
-      automationError.value = error?.message || '刷新任务更新失败'
-      clearLoginTimer()
-      isRefreshing.value = false
-    })
-  }, 3000)
-}
-
-const startBackgroundTaskPolling = () => {
-  if (backgroundTaskTimer !== null) return
-  backgroundTaskTimer = window.setInterval(async () => {
-    if (backgroundTaskPending) return
-    if (isTaskOpen.value) return
-    if (loginTimer !== null) return
-    if (!isRefreshing.value && !loginTask.value) return
-    backgroundTaskPending = true
-    try {
-      await loadCurrentTasks()
-    } catch (error: any) {
-      automationError.value = error?.message || '后台刷新失败'
-    } finally {
-      backgroundTaskPending = false
-    }
-  }, 6000)
-}
-
-const loadCurrentTasks = async () => {
-  await loadCurrentTaskByKind('login')
 }
 
 </script>

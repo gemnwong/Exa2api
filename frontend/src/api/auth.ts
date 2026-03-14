@@ -30,7 +30,7 @@ export const authApi = {
     apiClient.get('/auth/options') as Promise<AuthOptionsResponse>,
 
   changePassword: (data: { old_password: string; new_password: string }) =>
-    apiClient.post('/auth/change-password', data),
+    apiClient.post('/auth/password', data),
 
   redeem: (data: { code: string }) =>
     apiClient.post('/auth/redeem', data),
