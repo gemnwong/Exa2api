@@ -6,6 +6,7 @@
   <strong>简体中文</strong>
 </p>
 <p align="center">
+  基于L站大佬项目魔改自用，实际测试没有太大价值。
   面向 Exa 账号池的 OpenAI 兼容代理与管理面板。
 </p>
 
